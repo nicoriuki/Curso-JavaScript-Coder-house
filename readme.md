@@ -1,6 +1,6 @@
 # Curso de JabaScript de Coder House
 
-## Alumno Nicolas MArquez
+## Alumno Nicolas Marquez
 
 Repositorio donde se entregan todos los desafio
 
