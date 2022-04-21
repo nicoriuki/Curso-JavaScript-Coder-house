@@ -1,0 +1,19 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+}
+body {
+      background-color: black;
+}
+header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: cadetblue;
+      color: yellow;
+      height: 100px !important;
+}
+main {
+      background-color: black;
+}
