@@ -11,7 +11,7 @@ function menu(
       let total = entradaValor + pricipalValor + postreValor + bebidaValor,
             propina = total * 0.1;
       return (
-            "la entrada :" +
+            "la entrada : " +
             entrada +
             " $" +
             entradaValor +
@@ -23,13 +23,13 @@ function menu(
             postre +
             " $" +
             postreValor +
-            "La Bebida : " +
+            ", La Bebida : " +
             bebida +
             " $" +
             bebidaValor +
-            "Total : $" +
+            ". Total : $" +
             total +
-            "Propina : $" +
+            ". Propina : $" +
             propina
       );
 }
