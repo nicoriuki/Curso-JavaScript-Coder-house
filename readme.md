@@ -14,10 +14,10 @@ Repositorio donde se entregan todos los desafio
 
 ### **19/04/2022**
 
--[ Desafio opcional N° 1](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/desafio%20opcional%201/index.html)
+- [ Desafio opcional N° 1](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/desafio%20opcional%201/index.html)
 
 **Desafios entregables**
 
-### **22/04/2022**
+### **21/04/2022**
 
 - [Simulador Interactivo](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/Simulador%20interactivo/index.html)
