@@ -1,9 +1,3 @@
-/* const ENTRADAS = [
-      { nombre: "fiambre", precio: 200 },
-      { nombre: "pan", precio: 100 },
-      { nombre: "mani", precio: 150 },
-      { nombre: "nada", precio: 0 },
-]; */
 const COMIDA = [];
 
 function menu(
