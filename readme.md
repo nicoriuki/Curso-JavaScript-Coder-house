@@ -21,3 +21,7 @@ Repositorio donde se entregan todos los desafio
 ### **21/04/2022**
 
 - [Simulador Interactivo](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/Simulador%20interactivo/index.html)
+
+### **28/04/2022**
+
+- [Incorporar Arrays]
