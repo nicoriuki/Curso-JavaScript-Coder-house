@@ -12,34 +12,38 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container text-center">
     <h1>CUENTA</h1>
-    <form id="formMenu">
-      <label for="menuNombre" class="form-label">Nombre</label>
-      <input type="text" class="form-control" id="menuNombre">
-      <label for="menuEntrada" class="form-label">Entrada</label>
-      <select class="form-control" id="menuEntrada">
+    <div class="d-flex justify-content-center">
 
-      </select>
+      <form id="formMenu">
+        <label for="menuNombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="menuNombre" required>
+        <label for="menuEntrada" class="form-label">Entrada</label>
+        <select class="form-control" id="menuEntrada">
+          <option value="No se eligio $0">Seleccione una una entrada</option>
+        </select>
+        <label for="menuPrincipal" class="form-label">Principal</label>
+        <select class="form-control" id="menuPrincipal">
+          <option value="No se eligio $0">Seleccione una una entrada</option>
+        </select>
+        <label for="menuPostre" class="form-label">Postre</label>
+        <select class="form-control" id="menuPostre">
+          <option value="No se eligio $0">Seleccione una una entrada</option>
+        </select>
+        <label for="menuBebida" class="form-label">Bebida</label>
+        <select class="form-control" id="menuBebida">
+          <option value="No se eligio $0">Seleccione una una entrada</option>
+        </select>
 
-
-      <label for="menuPrincipal" class="form-label">Principal</label>
-      <select class="form-control" id="menuPrincipal">
-      </select>
-
-      <label for="menuPostre" class="form-label">Postre</label>
-      <select class="form-control" id="menuPostre">
-      </select>
-
-      <label for="menuBebida" class="form-label">Bebida</label>
-      <select class="form-control" id="menuBebida">
-      </select>
-
-      <button type="submit" class="btn btn-primary" id="btnAgregar">Agregar</button>
-    </form>
+        <button type="submit" class="btn btn-primary mt-4" id="btnAgregar">Agregar</button>
+      </form>
+    </div>
   </div>
-  <button id="btnMenues" class="btn btn-dark">Mostrar Menues</button><br>
-  <div id="divMenues" class="row"></div>
+  <div class="container d-flex justify-content-center">
+    <button id="btnMenues" class="btn btn-dark mt-5">Mostrar Menues</button>
+  </div>
+  <div id="divMenues" class="container row mt-5"></div>
 
   <a href="../index.html">Volver</a>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

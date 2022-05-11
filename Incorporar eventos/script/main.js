@@ -1,5 +1,4 @@
-/*capturamos los elementos de DOM*/
-let listaMenu = document.getElementById("listaMenu");
+/* Definimos la clase menu */
 class Menu {
       constructor(
             nombre,
@@ -34,7 +33,9 @@ class Menu {
             return this.total() * 0.1;
       }
 }
+/*capturamos los elementos de DOM*/
 let menues = [],
+      listaMenu = document.getElementById("listaMenu"),
       formMenu = document.getElementById("formMenu"),
       btnMenues = document.getElementById("btnMenues"),
       divMenues = document.getElementById("divMenues"),
@@ -43,35 +44,30 @@ let menues = [],
       menuPostre = document.getElementById("menuPostre"),
       menuBebida = document.getElementById("menuBebida");
 
-/* formMenu.addEventListener("submit", (e) => {
-        e.preventDefault();
-        let nombre = document.getElementById("nombre").value,
-      } */
-
 /* Se define el menu */
 const COMIDA = [],
       ENTRADA = [
-            { comida: "fiambre", precio: 200 },
-            { comida: "pan", precio: 100 },
-            { comida: "mani", precio: 150 },
+            { comida: "Fiambre", precio: 200 },
+            { comida: "Pan", precio: 100 },
+            { comida: "Mani", precio: 150 },
       ],
       PRINCIPAL = [
-            { comida: "carne", precio: 430 },
-            { comida: "pescado", precio: 375 },
-            { comida: "pollo", precio: 470 },
+            { comida: "Carne", precio: 430 },
+            { comida: "Pescado", precio: 375 },
+            { comida: "Pollo", precio: 470 },
       ],
       POSTRE = [
-            { comida: "flan", precio: 175 },
-            { comida: "vigilante", precio: 150 },
-            { comida: "helado", precio: 220 },
+            { comida: "Flan", precio: 175 },
+            { comida: "Vigilante", precio: 150 },
+            { comida: "Helado", precio: 220 },
       ],
       BEBIDA = [
-            { comida: "agua", precio: 120 },
-            { comida: "vino", precio: 450 },
-            { comida: "gaseosa", precio: 250 },
+            { comida: "Agua", precio: 120 },
+            { comida: "Vino", precio: 450 },
+            { comida: "Gaseosa", precio: 250 },
       ],
       NINGUNO = [{ comida: "No se eligio", precio: 0 }];
-
+/*Se crean dinamicamente los Select del formulario*/
 ENTRADA.forEach((entrada) => {
       let option = document.createElement("option");
       option.value = entrada.comida + " $" + entrada.precio;
@@ -96,7 +92,7 @@ BEBIDA.forEach((bebida) => {
       option.innerHTML = bebida.comida + " $" + bebida.precio;
       menuBebida.append(option);
 });
-
+/*se crea el evento para el boton de agregar menu*/
 formMenu.addEventListener("submit", (e) => {
       e.preventDefault();
       let nombre = document.getElementById("menuNombre").value,
@@ -122,11 +118,12 @@ formMenu.addEventListener("submit", (e) => {
       menues.push(menu);
       formMenu.reset();
 });
+/*se crea el evento para el boton de mostrar menu*/
 btnMenues.addEventListener("click", () => {
       divMenues.innerHTML = "";
       menues.forEach((menu) => {
             divMenues.innerHTML += `
-            <div class="card" style="width: 18rem;">
+            <div class="card m-2" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Menu de ${menu.nombre}</h5>
                     <p class="card-text">Entrada: ${menu.entrada} $${
