@@ -32,6 +32,6 @@ Repositorio donde se entregan todos los desafio
 
 ### **10/05/2022**
 
-- [Interactuando con HTML](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/interactuar%20con%20HTML\index.html)
+- [Interactuando con HTML](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/interactuar%20con%20HTML/index.html)
 
-- [ Incorporar eventos](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/Incorporar%eventos\index.html)
+- [ Incorporar eventos](https://nicoriuki.github.io/Curso-JavaScript-Coder-house/Incorporar%eventos/index.html)
