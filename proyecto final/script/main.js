@@ -190,7 +190,7 @@ function mostrarCalendario() {
                         `;
                   }
             });
-            if (d.querySelectorAll(".evento" + i).length >= 7) {
+            if (d.querySelectorAll(".evento" + i).length >= 5) {
                   let event = d.querySelectorAll(".evento" + i).length;
                   d.getElementById("diaE" + i).innerHTML = `
                         <div class="evento${i}" >${event} eventos</div>`;
@@ -340,7 +340,7 @@ const modalTitulo = d.getElementById("modalTitulo"),
 d.addEventListener("click", (e) => {
       let eventosdia = [];
       for (i = 0; i < eventos.length; i++) {
-            if (e.target.closest(".dia") != null) {
+            if (e.target.closest(".dia").value != null) {
                   if (eventos[i].conjunto == e.target.closest(".dia").value) {
                         modalBody.innerHTML = "";
                         eventosdia.push(eventos[i]);
