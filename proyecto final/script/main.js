@@ -20,7 +20,7 @@ if (localStorage.getItem("evento")) {
 } else {
       localStorage.setItem("evento", JSON.stringify(eventos));
 }
-/* console.log(eventos); */
+
 /* Defino la fecha */
 let fechaActual = new Date(),
       diaActual = fechaActual.getDate(),
@@ -52,6 +52,10 @@ diaModal.value = diaActual;
 mesActualModal.value = mesNumero;
 mesActualModal.innerText = MESES[mesNumero];
 anioModal.value = anioActual;
+
+let eventos2 = eventos.sort((a, b) => a.hora - b.hora);
+
+console.log(eventos2);
 
 /*Defino los Divs de los eventos*/
 const diaN = "diaN";
@@ -146,7 +150,6 @@ function mostrarCalendario() {
       if (mesNumero === 11) {
             for (let i = 1; dias.length <= 41; i++) {
                   dias.push(new Dia(i, 0, anioActual + 1, "mesNoActual"));
-                  /*   console.log(i); */
             }
             console.log(dias);
       } else {
@@ -155,7 +158,6 @@ function mostrarCalendario() {
                         new Dia(i, mesNumero + 1, anioActual, "mesNoActual")
                   );
             }
-            /*  console.log(dias); */
       }
       /*pintar los dias*/
 
@@ -164,7 +166,6 @@ function mostrarCalendario() {
                   dias[i].dia + "" + dias[i].mes + "" + dias[i].anio;
             d.getElementById("diaN" + i).innerHTML = " ";
             d.getElementById("diaE" + i).innerHTML = " ";
-
             d.getElementById(
                   "diaN" + i
             ).innerHTML += `<p class="numeroDia">${dias[i].dia}</p>`;
@@ -179,14 +180,21 @@ function mostrarCalendario() {
                   }
             });
 
-            eventos.forEach((evento) => {
+            eventos2.forEach((evento) => {
                   if (
                         dias[i].dia === parseInt(evento.dia) &&
                         dias[i].mes === parseInt(evento.mes) &&
                         dias[i].anio === parseInt(evento.anio)
                   ) {
+                        if (evento.hora.toString().length == 3) {
+                              evento.hora = "0" + evento.hora;
+                        }
                         d.getElementById("diaE" + i).innerHTML += `
-                       <div class="evento evento${i} bg-${evento.color}" >${evento.hora} * ${evento.titulo}</div> 
+                       <div class="evento evento${i} bg-${evento.color}" >${
+                              evento.hora.toString().slice(0, 2) +
+                              ":" +
+                              evento.hora.toString().slice(2, 4)
+                        } * ${evento.titulo}</div> 
                         `;
                   }
             });
@@ -197,8 +205,6 @@ function mostrarCalendario() {
             }
       }
 }
-
-/* console.log(eventos); */
 
 /*calcular  los dias de los meses*/
 function diasDelMes(mes) {
@@ -249,9 +255,7 @@ function siguienteMes() {
 
       if (mesNumero !== 11) {
             mesNumero++;
-            /*  console.log("hola"); */
       } else {
-            /* console.log("chau"); */
             mesNumero = 0;
             anioActual++;
       }
@@ -323,7 +327,10 @@ eventosModal.addEventListener("submit", (e) => {
                   eventosModal.mesModal.value,
                   eventosModal.anioModal.value,
                   eventosModal.colorModal.value,
-                  eventosModal.horaModal.value,
+                  parseInt(
+                        eventosModal.horaModal.value.slice(0, 2) +
+                              eventosModal.horaModal.value.slice(3, 5)
+                  ),
                   eventosModal.tituloModal.value,
                   eventosModal.descripcionModal.value
             )
@@ -337,16 +344,65 @@ mostrarCalendario();
 const modalTitulo = d.getElementById("modalTitulo"),
       modalBody = d.getElementById("modalBody");
 
-d.addEventListener("click", (e) => {
+/*    d.addEventListener("click", (e) => {
       let eventosdia = [];
       for (i = 0; i < eventos.length; i++) {
-            if (e.target.closest(".dia").value != null) {
+            if (e.target.closest(".dia").value != "") {
                   if (eventos[i].conjunto == e.target.closest(".dia").value) {
                         modalBody.innerHTML = "";
                         eventosdia.push(eventos[i]);
-                        /* console.log(e.target.closest(".dia").value);  */
+                        
 
-                        /*  modal.show(); */
+                        modalTitulo.innerText = `Eventos del dia ${
+                              eventos[i].dia
+                        } de ${MESES[eventos[i].mes]} del  ${eventos[i].anio}`;
+                        modal.show();
+                  }
+            }
+      }   */
+d.querySelectorAll(".evento").forEach((evento) => {
+      evento.addEventListener("click", (e) => {
+            console.log(e.target);
+            let eventosdia = [];
+            for (i = 0; i < eventos.length; i++) {
+                  if (e.target.closest(".dia").value != "") {
+                        if (
+                              eventos[i].conjunto ==
+                              e.target.closest(".dia").value
+                        ) {
+                              modalBody.innerHTML = "";
+                              eventosdia.push(eventos[i]);
+
+                              modalTitulo.innerText = `Eventos del dia ${
+                                    eventos[i].dia
+                              } de ${MESES[eventos[i].mes]} del  ${
+                                    eventos[i].anio
+                              }`;
+                              modal.show();
+                        }
+                  }
+            }
+
+            eventosdia.forEach((evento) => {
+                  modalBody.innerHTML += `
+                <div class=" col-12 bg-${evento.color}">
+                <h4>${evento.titulo}<img class="papelera" id="${evento.id}" src="imagenes/papelera.png" ></h4>
+                <p>${evento.descripcion}</p>
+                </div>
+                `;
+            });
+      });
+});
+
+/* d.querySelectorAll(".evento").addEventListener("click", (e) => {
+      let eventosdia = [];
+      for (i = 0; i < eventos.length; i++) {
+            if (e.target.closest(".dia").value != "") {
+                  if (eventos[i].conjunto == e.target.closest(".dia").value) {
+                        modalBody.innerHTML = "";
+                        eventosdia.push(eventos[i]);
+                       
+
                         modalTitulo.innerText = `Eventos del dia ${
                               eventos[i].dia
                         } de ${MESES[eventos[i].mes]} del  ${eventos[i].anio}`;
@@ -364,8 +420,8 @@ d.addEventListener("click", (e) => {
                 `;
       });
 
-      /* console.log(eventosdia); */
-});
+     
+}); */
 d.addEventListener("click", (e) => {
       if (e.target.classList.contains("papelera")) {
             let id = e.target.id;

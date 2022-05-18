@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
   <title>Calendario</title>
 </head>
 
@@ -256,7 +257,7 @@
             <div class=" container row">
               <div class="col-6">
                 <label for="diaModal">DIA</label>
-                <input type="number" name="diaModal" id="diaModal">
+                <input type="number" name="diaModal" id="diaModal" min="1" max="31" required>
               </div>
               <div class="col-6">
                 <label for="mesModal">MES</label>
@@ -270,11 +271,11 @@
               </div>
               <div class="col-6">
                 <label for="horaModal">HORA</label>
-                <input type="time" name="horaModal" id="horaModal">
+                <input type="time" name="horaModal" id="horaModal" required>
               </div>
               <div class="col-12">
                 <label for="colorModal">Color</label>
-                <select name="colorModal" id="colorModal">
+                <select name="colorModal" id="colorModal" required>
                   <option value="light">Elija un color</option>
                   <option value="primary" class="alert alert-primary" role="alert">Primary</option>
                   <option value="secondary" class="alert alert-secondary" role="alert">Secondary</option>
@@ -288,10 +289,10 @@
                 </select>
               </div>
               <label for="tituloModal">Titulo</label>
-              <input type="text" class="inputModal" name="tituloModal" id="tituloModal">
+              <input type="text" class="inputModal" name="tituloModal" id="tituloModal" required>
               <label for="descripcion">Descripcion</label>
-              <textarea class="inputModal mb-5" name="descripcionModal" id="descripcionModal" cols="30"
-                rows="10"></textarea>
+              <textarea class="inputModal mb-5" name="descripcionModal" id="descripcionModal" cols="30" rows="10"
+                required></textarea>
               <button type="submit" class="btn btn-primary">Agregar Evento</button>
             </div>
           </form>
