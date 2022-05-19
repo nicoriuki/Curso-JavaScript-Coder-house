@@ -20,7 +20,7 @@ if (localStorage.getItem("evento")) {
 } else {
       localStorage.setItem("evento", JSON.stringify(eventos));
 }
-
+let eventos2 = eventos.sort((a, b) => a.hora - b.hora);
 /* Defino la fecha */
 let fechaActual = new Date(),
       diaActual = fechaActual.getDate(),
@@ -45,17 +45,15 @@ const d = document,
       mesActualModal = d.getElementById("mesActualModal"),
       mesModal = d.getElementById("mesModal"),
       anioModal = d.getElementById("anioModal"),
-      eventosModal = d.getElementById("eventosModal");
+      eventosModal = d.getElementById("eventosModal"),
+      modalTitulo = d.getElementById("modalTitulo"),
+      modalBody = d.getElementById("modalBody");
 mesHtml.innerHTML = MESES[mesNumero];
 anioHtml.innerHTML = anioActual;
 diaModal.value = diaActual;
 mesActualModal.value = mesNumero;
 mesActualModal.innerText = MESES[mesNumero];
 anioModal.value = anioActual;
-
-let eventos2 = eventos.sort((a, b) => a.hora - b.hora);
-
-console.log(eventos2);
 
 /*Defino los Divs de los eventos*/
 const diaN = "diaN";
@@ -108,7 +106,6 @@ class Evento {
             this.descripcion = descripcion;
       }
 }
-/*defino las variables para usar en las semanas*/
 
 let dias = [];
 /* Funcion para mostrar el calendario */
@@ -201,7 +198,7 @@ function mostrarCalendario() {
             if (d.querySelectorAll(".evento" + i).length >= 5) {
                   let event = d.querySelectorAll(".evento" + i).length;
                   d.getElementById("diaE" + i).innerHTML = `
-                        <div class="evento${i}" >${event} eventos</div>`;
+                        <div class="evento evento${i} econjunto" >${event} eventos</div>`;
             }
       }
 }
@@ -296,6 +293,7 @@ function cargarNuevaFecha() {
       mostrarCalendario();
 }
 
+/*captura de eventos */
 mesSiguiente.addEventListener("click", () => {
       siguienteMes();
 });
@@ -310,14 +308,23 @@ anioSiguiente.addEventListener("click", () => {
 anioAnterrion.addEventListener("click", () => {
       anteriorAnio();
 });
-/*eventos para pasar los años*/
-
+console.log(eventos);
+function idEvento(hora, dia, mes) {
+      return hora + "" + dia + "" + mes;
+}
 /*eventos para agregar eventos*/
 eventosModal.addEventListener("submit", (e) => {
       e.preventDefault();
       eventos.push(
             new Evento(
-                  eventos.length + 1,
+                  idEvento(
+                        parseInt(
+                              eventosModal.horaModal.value.slice(0, 2) +
+                                    eventosModal.horaModal.value.slice(3, 5)
+                        ),
+                        eventosModal.diaModal.value,
+                        eventosModal.mesModal.value
+                  ),
                   eventosModal.diaModal.value +
                         "" +
                         eventosModal.mesModal.value +
@@ -341,25 +348,7 @@ eventosModal.addEventListener("submit", (e) => {
 
 /*muestro el calendario*/
 mostrarCalendario();
-const modalTitulo = d.getElementById("modalTitulo"),
-      modalBody = d.getElementById("modalBody");
 
-/*    d.addEventListener("click", (e) => {
-      let eventosdia = [];
-      for (i = 0; i < eventos.length; i++) {
-            if (e.target.closest(".dia").value != "") {
-                  if (eventos[i].conjunto == e.target.closest(".dia").value) {
-                        modalBody.innerHTML = "";
-                        eventosdia.push(eventos[i]);
-                        
-
-                        modalTitulo.innerText = `Eventos del dia ${
-                              eventos[i].dia
-                        } de ${MESES[eventos[i].mes]} del  ${eventos[i].anio}`;
-                        modal.show();
-                  }
-            }
-      }   */
 d.querySelectorAll(".evento").forEach((evento) => {
       evento.addEventListener("click", (e) => {
             console.log(e.target);
@@ -394,34 +383,6 @@ d.querySelectorAll(".evento").forEach((evento) => {
       });
 });
 
-/* d.querySelectorAll(".evento").addEventListener("click", (e) => {
-      let eventosdia = [];
-      for (i = 0; i < eventos.length; i++) {
-            if (e.target.closest(".dia").value != "") {
-                  if (eventos[i].conjunto == e.target.closest(".dia").value) {
-                        modalBody.innerHTML = "";
-                        eventosdia.push(eventos[i]);
-                       
-
-                        modalTitulo.innerText = `Eventos del dia ${
-                              eventos[i].dia
-                        } de ${MESES[eventos[i].mes]} del  ${eventos[i].anio}`;
-                        modal.show();
-                  }
-            }
-      }
-
-      eventosdia.forEach((evento) => {
-            modalBody.innerHTML += `
-                <div class=" col-12 bg-${evento.color}">
-                <h4>${evento.titulo}<img class="papelera" id="${evento.id}" src="imagenes/papelera.png" ></h4>
-                <p>${evento.descripcion}</p>
-                </div>
-                `;
-      });
-
-     
-}); */
 d.addEventListener("click", (e) => {
       if (e.target.classList.contains("papelera")) {
             let id = e.target.id;
