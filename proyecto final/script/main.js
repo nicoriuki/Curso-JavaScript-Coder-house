@@ -148,7 +148,6 @@ function mostrarCalendario() {
             for (let i = 1; dias.length <= 41; i++) {
                   dias.push(new Dia(i, 0, anioActual + 1, "mesNoActual"));
             }
-            console.log(dias);
       } else {
             for (let i = 1; dias.length <= 41; i++) {
                   dias.push(
@@ -308,7 +307,7 @@ anioSiguiente.addEventListener("click", () => {
 anioAnterrion.addEventListener("click", () => {
       anteriorAnio();
 });
-console.log(eventos);
+
 function idEvento(hora, dia, mes) {
       return hora + "" + dia + "" + mes;
 }
@@ -351,7 +350,6 @@ mostrarCalendario();
 
 d.querySelectorAll(".evento").forEach((evento) => {
       evento.addEventListener("click", (e) => {
-            console.log(e.target);
             let eventosdia = [];
             for (i = 0; i < eventos.length; i++) {
                   if (e.target.closest(".dia").value != "") {
