@@ -15,12 +15,13 @@ const MESES = [
 ];
 let eventos = [];
 
-if (localStorage.getItem("evento")) {
-      eventos = JSON.parse(localStorage.getItem("evento"));
-} else {
-      localStorage.setItem("evento", JSON.stringify(eventos));
-}
+localStorage.getItem("evento")
+      ? /*OPERADOR TERNARIO*/
+        (eventos = JSON.parse(localStorage.getItem("evento")))
+      : localStorage.setItem("evento", JSON.stringify(eventos));
+
 let eventos2 = eventos.sort((a, b) => a.hora - b.hora);
+
 /* Defino la fecha */
 let fechaActual = new Date(),
       diaActual = fechaActual.getDate(),
@@ -190,7 +191,7 @@ function mostrarCalendario() {
                               evento.hora.toString().slice(0, 2) +
                               ":" +
                               evento.hora.toString().slice(2, 4)
-                        } * ${evento.titulo}</div> 
+                        } - ${evento.titulo}</div> 
                         `;
                   }
             });
@@ -283,10 +284,11 @@ function anteriorAnio() {
 
       cargarNuevaFecha();
 }
-
+/*Se aplica SPREAD*/
+const fecha = [anioActual, mesNumero, diaActual];
 /*funcion para cargar las nuevas fechas */
 function cargarNuevaFecha() {
-      fechaActual.setFullYear(anioActual, mesNumero, diaActual);
+      fechaActual.setFullYear(...fecha);
       mesHtml.innerHTML = MESES[mesNumero];
       anioHtml.innerHTML = anioActual.toString();
       mostrarCalendario();
@@ -369,12 +371,17 @@ d.querySelectorAll(".evento").forEach((evento) => {
                         }
                   }
             }
-
             eventosdia.forEach((evento) => {
+                  /*Desestructuración*/
+                  let = { color, titulo, id, descripcion, hora } = evento;
                   modalBody.innerHTML += `
-                <div class=" col-12 bg-${evento.color}">
-                <h4>${evento.titulo}<img class="papelera" id="${evento.id}" src="imagenes/papelera.png" ></h4>
-                <p>${evento.descripcion}</p>
+                <div class=" col-12 bg-${color}">
+                <h4>${
+                      hora.toString().slice(0, 2) +
+                      ":" +
+                      hora.toString().slice(2, 4)
+                } - ${titulo}<img class="papelera" id="${id}" src="imagenes/papelera.png" ></h4>
+                <p>${descripcion}</p>
                 </div>
                 `;
             });
