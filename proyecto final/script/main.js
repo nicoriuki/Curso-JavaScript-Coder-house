@@ -29,9 +29,15 @@ let fechaActual = new Date(),
       anioActual = fechaActual.getFullYear();
 /* capturo los elementos del dom */
 const d = document,
-      modal = new bootstrap.Modal(document.getElementById("staticBackdrop1"), {
+      modal = new bootstrap.Modal(document.getElementById("modalEvento"), {
             keyboard: false,
       }),
+      modalAgregar = new bootstrap.Modal(
+            document.getElementById("modalAgregar"),
+            {
+                  keyboard: false,
+            }
+      ),
       mesHtml = d.getElementById("mes"),
       anioHtml = d.getElementById("anio"),
       diasHtml = d.getElementById("diasSemanales"),
@@ -343,8 +349,24 @@ eventosModal.addEventListener("submit", (e) => {
                   eventosModal.descripcionModal.value
             )
       );
+      modalAgregar.hide();
       localStorage.setItem("evento", JSON.stringify(eventos));
-      window.location.reload();
+      Toastify({
+            text: `Evento ${eventosModal.tituloModal.value} agendado`,
+            duration: 2000,
+            newWindow: false,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: false, // Prevents dismissing of toast on hover
+            style: {
+                  background:
+                        "radial-gradient(circle at 4.07% 76.52%, #ffa51c 0, #ff9233 10%, #ff7e42 20%, #ff684d 30%, #ff5054 40%, #ff3858 50%, #e41f59 60%, #cc015b 70%, #b6005d 80%, #a2005f 90%, #910063 100%)",
+            },
+      }).showToast();
+      setTimeout(() => {
+            window.location.reload();
+      }, 2500);
 });
 
 /*muestro el calendario*/
@@ -390,11 +412,29 @@ d.querySelectorAll(".evento").forEach((evento) => {
 
 d.addEventListener("click", (e) => {
       if (e.target.classList.contains("papelera")) {
-            let id = e.target.id;
-            eventos = eventos.filter((evento) => {
-                  return evento.id != id;
+            Swal.fire({
+                  title: "Está seguro de eliminar el evento?",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Sí, seguro",
+                  cancelButtonText: "No, no quiero",
+            }).then((result) => {
+                  if (result.isConfirmed) {
+                        let id = e.target.id;
+                        eventos = eventos.filter((evento) => {
+                              return evento.id != id;
+                        });
+                        localStorage.setItem("evento", JSON.stringify(eventos));
+                        Swal.fire({
+                              title: "Borrado!",
+                              icon: "success",
+                              text: "El evento ha sido borrado",
+                        });
+
+                        setTimeout(() => {
+                              window.location.reload();
+                        }, 3500);
+                  }
             });
-            localStorage.setItem("evento", JSON.stringify(eventos));
-            window.location.reload();
       }
 });
