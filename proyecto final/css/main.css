@@ -33,6 +33,9 @@ th {
       height: 100px;
       text-align: center;
 }
+.dia:hover {
+      cursor: pointer;
+}
 
 .numeroDia {
       margin: 0% auto;
@@ -56,9 +59,6 @@ th {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-}
-.evento:hover {
-      cursor: pointer;
 }
 
 .btnModalEvento {

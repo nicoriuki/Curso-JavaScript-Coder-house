@@ -1,4 +1,4 @@
-/* difino los meses */
+/* difino los Meses */
 const MESES = [
       "Enero",
       "Febrero",
@@ -13,11 +13,20 @@ const MESES = [
       "Noviembre",
       "Diciembre",
 ];
-let eventos = [];
+/*Defino los array vacios que voy a usar */
+let eventos = [],
+      dias = [],
+      feriados2 = [];
+/*FECTH*/
+const feriaditos = async () => {
+      let promesa = await fetch("script/feriados.json");
+      let feriado = await promesa.json();
 
+      return feriado.feriados;
+};
+/*LOCAL STORAGE*/
 localStorage.getItem("evento")
-      ? /*OPERADOR TERNARIO*/
-        (eventos = JSON.parse(localStorage.getItem("evento")))
+      ? (eventos = JSON.parse(localStorage.getItem("evento")))
       : localStorage.setItem("evento", JSON.stringify(eventos));
 
 let eventos2 = eventos.sort((a, b) => a.hora - b.hora);
@@ -29,11 +38,14 @@ let fechaActual = new Date(),
       anioActual = fechaActual.getFullYear();
 /* capturo los elementos del dom */
 const d = document,
-      modal = new bootstrap.Modal(document.getElementById("modalEvento"), {
-            keyboard: false,
-      }),
       modalAgregar = new bootstrap.Modal(
             document.getElementById("modalAgregar"),
+            {
+                  keyboard: false,
+            }
+      ),
+      modalTodosDias = new bootstrap.Modal(
+            document.getElementById("modalDia"),
             {
                   keyboard: false,
             }
@@ -53,8 +65,11 @@ const d = document,
       mesModal = d.getElementById("mesModal"),
       anioModal = d.getElementById("anioModal"),
       eventosModal = d.getElementById("eventosModal"),
-      modalTitulo = d.getElementById("modalTitulo"),
-      modalBody = d.getElementById("modalBody");
+      modalDia = d.getElementById("modalDia"),
+      diaTitulo = d.getElementById("diaTitulo"),
+      diaBody = d.getElementById("diaBody"),
+      diaN = "diaN",
+      diaE = "diaE";
 mesHtml.innerHTML = MESES[mesNumero];
 anioHtml.innerHTML = anioActual;
 diaModal.value = diaActual;
@@ -63,13 +78,12 @@ mesActualModal.innerText = MESES[mesNumero];
 anioModal.value = anioActual;
 
 /*Defino los Divs de los eventos*/
-const diaN = "diaN";
+
 for (let i = 0; i <= 41; i++) {
       eval("const " + diaN + i + "= " + i + ";");
       diaN[i] = d.getElementById("diaN" + [i]);
 }
 
-const diaE = "diaE";
 for (let i = 0; i <= 41; i++) {
       eval("const " + diaE + i + "= " + i + ";");
       diaE[i] = d.getElementById("diaE" + [i]);
@@ -81,7 +95,7 @@ MESES.forEach((mes, index) => {
       option.innerHTML = mes;
       mesModal.append(option);
 });
-/*creo la clase */
+/*creo la clases */
 class Dia {
       constructor(dia, mes, anio, color) {
             this.dia = dia;
@@ -114,15 +128,8 @@ class Evento {
       }
 }
 
-let dias = [];
 /* Funcion para mostrar el calendario */
-function mostrarCalendario() {
-      diasTabla.forEach((dia, index) => {
-            diasTabla[index].classList.remove("noHabil");
-            diasTabla[index].classList.remove("mesNoActual");
-            diasTabla[index].classList.remove("mesActual");
-      });
-      /*primeros dias */
+function cargarDias() {
       if (mesNumero === 0) {
             for (let i = primerDia(); i > 0; i--) {
                   dias.push(
@@ -162,27 +169,28 @@ function mostrarCalendario() {
                   );
             }
       }
-      /*pintar los dias*/
-
+}
+function pintarFeriados() {
       for (let i = 0; i <= dias.length - 1; i++) {
-            d.getElementById("dia" + i).value =
-                  dias[i].dia + "" + dias[i].mes + "" + dias[i].anio;
-            d.getElementById("diaN" + i).innerHTML = " ";
-            d.getElementById("diaE" + i).innerHTML = " ";
-            d.getElementById(
-                  "diaN" + i
-            ).innerHTML += `<p class="numeroDia">${dias[i].dia}</p>`;
-            diasTabla[i].classList.add(dias[i].color);
-            FERIADOS.forEach((feriado) => {
-                  if (
-                        dias[i].dia === feriado.dia &&
-                        dias[i].mes === feriado.mes &&
-                        dias[i].anio === feriado.anio
-                  ) {
-                        diasTabla[i].classList.add("noHabil");
-                  }
+            feriaditos().then((feriado) => {
+                  feriado.forEach((feriado) => {
+                        if (
+                              dias[i].dia === parseInt(feriado.dia) &&
+                              dias[i].mes === parseInt(feriado.mes) &&
+                              dias[i].anio === parseInt(feriado.anio)
+                        ) {
+                              d.getElementById("diaN" + i).innerHTML += `
+                       <div class="evento evento${i}  noHabil" > ${feriado.titulo}</div> 
+                        `;
+                              feriados2.push(feriado);
+                              diasTabla[i].classList.add("noHabil");
+                        }
+                  });
             });
-
+      }
+}
+function pintarEventos() {
+      for (let i = 0; i <= dias.length - 1; i++) {
             eventos2.forEach((evento) => {
                   if (
                         dias[i].dia === parseInt(evento.dia) &&
@@ -191,6 +199,12 @@ function mostrarCalendario() {
                   ) {
                         if (evento.hora.toString().length == 3) {
                               evento.hora = "0" + evento.hora;
+                        }
+                        if (evento.hora.toString().length == 2) {
+                              evento.hora = "00" + evento.hora;
+                        }
+                        if (evento.hora.toString().length == 1) {
+                              evento.hora = "000" + evento.hora;
                         }
                         d.getElementById("diaE" + i).innerHTML += `
                        <div class="evento evento${i} bg-${evento.color}" >${
@@ -208,21 +222,38 @@ function mostrarCalendario() {
             }
       }
 }
+function pintarDias() {
+      for (let i = 0; i <= dias.length - 1; i++) {
+            d.getElementById("dia" + i).value =
+                  dias[i].dia + "" + dias[i].mes + "" + dias[i].anio;
+            d.getElementById("diaN" + i).innerHTML = " ";
+            d.getElementById("diaE" + i).innerHTML = " ";
+            d.getElementById(
+                  "diaN" + i
+            ).innerHTML += `<p class="numeroDia">${dias[i].dia}</p>`;
+            diasTabla[i].classList.add(dias[i].color);
+      }
+}
 
+function mostrarCalendario() {
+      diasTabla.forEach((dia) => {
+            dia.classList.remove("noHabil");
+            dia.classList.remove("mesNoActual");
+            dia.classList.remove("mesActual");
+      });
+      cargarDias();
+      pintarDias();
+      pintarFeriados();
+      pintarEventos();
+}
 /*calcular  los dias de los meses*/
+const MESES31 = [0, 2, 4, 6, 7, 9, 11],
+      MESES30 = [3, 5, 8, 10];
 function diasDelMes(mes) {
       if (mes === -1) mes = 11;
-      if (
-            mes == 0 ||
-            mes == 2 ||
-            mes == 4 ||
-            mes == 6 ||
-            mes == 7 ||
-            mes == 9 ||
-            mes == 11
-      ) {
+      if (MESES31.includes(mes)) {
             return 31;
-      } else if (mes == 3 || mes == 5 || mes == 8 || mes == 10) {
+      } else if (MESES30.includes(mes)) {
             return 30;
       } else {
             return anioBiciesto() ? 29 : 28;
@@ -255,6 +286,7 @@ function ultimoDia() {
 /*funcion  para iterar los meses*/
 function siguienteMes() {
       dias = [];
+      feriados2 = [];
 
       if (mesNumero !== 11) {
             mesNumero++;
@@ -267,6 +299,7 @@ function siguienteMes() {
 
 function anteriorMes() {
       dias = [];
+      feriados2 = [];
       if (mesNumero !== 0) {
             mesNumero--;
       } else {
@@ -275,9 +308,10 @@ function anteriorMes() {
       }
       cargarNuevaFecha();
 }
+/*funcion  para iterar los Años*/
 function siguienteAnio() {
       dias = [];
-
+      feriados2 = [];
       anioActual++;
 
       cargarNuevaFecha();
@@ -285,14 +319,14 @@ function siguienteAnio() {
 
 function anteriorAnio() {
       dias = [];
-
+      feriados2 = [];
       anioActual--;
 
       cargarNuevaFecha();
 }
-/*Se aplica SPREAD*/
-const fecha = [anioActual, mesNumero, diaActual];
+
 /*funcion para cargar las nuevas fechas */
+const fecha = [anioActual, mesNumero, diaActual];
 function cargarNuevaFecha() {
       fechaActual.setFullYear(...fecha);
       mesHtml.innerHTML = MESES[mesNumero];
@@ -356,9 +390,9 @@ eventosModal.addEventListener("submit", (e) => {
             duration: 2000,
             newWindow: false,
             close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: false, // Prevents dismissing of toast on hover
+            gravity: "top",
+            position: "right",
+            stopOnFocus: false,
             style: {
                   background:
                         "radial-gradient(circle at 4.07% 76.52%, #ffa51c 0, #ff9233 10%, #ff7e42 20%, #ff684d 30%, #ff5054 40%, #ff3858 50%, #e41f59 60%, #cc015b 70%, #b6005d 80%, #a2005f 90%, #910063 100%)",
@@ -369,34 +403,21 @@ eventosModal.addEventListener("submit", (e) => {
       }, 2500);
 });
 
-/*muestro el calendario*/
-mostrarCalendario();
-
-d.querySelectorAll(".evento").forEach((evento) => {
-      evento.addEventListener("click", (e) => {
-            let eventosdia = [];
-            for (i = 0; i < eventos.length; i++) {
-                  if (e.target.closest(".dia").value != "") {
-                        if (
-                              eventos[i].conjunto ==
-                              e.target.closest(".dia").value
-                        ) {
-                              modalBody.innerHTML = "";
-                              eventosdia.push(eventos[i]);
-
-                              modalTitulo.innerText = `Eventos del dia ${
-                                    eventos[i].dia
-                              } de ${MESES[eventos[i].mes]} del  ${
-                                    eventos[i].anio
-                              }`;
-                              modal.show();
-                        }
-                  }
+function eventosModal1(eventos, feriados, conjunto) {
+      feriados.forEach((feriado) => {
+            if (feriado.conjunto === conjunto) {
+                  diaBody.innerHTML += `
+                <div class=" col-12 bg-danger">
+                <h4>${feriado.titulo}</h4>
+                <p><a href="${feriado.descripcion}" target="_blank"rel="noopener">Descripcion en Wikipedia</a></p>
+                </div>
+                `;
             }
-            eventosdia.forEach((evento) => {
-                  /*Desestructuración*/
-                  let = { color, titulo, id, descripcion, hora } = evento;
-                  modalBody.innerHTML += `
+      });
+      eventos.forEach((evento) => {
+            /*Desestructuración*/
+            let = { color, titulo, id, descripcion, hora } = evento;
+            diaBody.innerHTML += `
                 <div class=" col-12 bg-${color}">
                 <h4>${
                       hora.toString().slice(0, 2) +
@@ -406,10 +427,21 @@ d.querySelectorAll(".evento").forEach((evento) => {
                 <p>${descripcion}</p>
                 </div>
                 `;
-            });
       });
-});
+}
 
+function verSiHayEventos(dia) {
+      let eventosdia = [];
+      for (i = 0; i < eventos.length; i++) {
+            if (eventos[i].conjunto == dia) {
+                  diaBody.innerHTML = "";
+                  eventosdia.push(eventos[i]);
+            }
+      }
+      diaBody.innerHTML = "";
+      modalTodosDias.show();
+      eventosModal1(eventosdia, feriados2, dia);
+}
 d.addEventListener("click", (e) => {
       if (e.target.classList.contains("papelera")) {
             Swal.fire({
@@ -438,3 +470,27 @@ d.addEventListener("click", (e) => {
             });
       }
 });
+d.addEventListener("click", (e) => {
+      if (e.target.closest(".dia")) {
+            openModal(e.target.closest(".dia"));
+      }
+});
+function openModal(dia) {
+      let diaNumero = dia.id.slice(3, 5);
+      diaTitulo.innerText = `Dia ${dias[diaNumero].dia} de ${
+            MESES[dias[diaNumero].mes]
+      } del ${dias[diaNumero].anio}`;
+      diaModal.value = dias[diaNumero].dia;
+      mesActualModal.innerHTML = MESES[dias[diaNumero].mes];
+      anioModal.value = dias[diaNumero].anio;
+
+      verSiHayEventos(dia.value);
+}
+d.getElementById("btnAgregar").addEventListener("click", () => {
+      diaModal.value = diaActual;
+      mesActualModal.innerText = MESES[mesNumero];
+      anioModal.value = anioActual;
+      modalAgregar.show();
+});
+/*muestro el calendario*/
+mostrarCalendario();
